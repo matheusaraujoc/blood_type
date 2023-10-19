@@ -2,12 +2,15 @@ class Genotype {
   final String _genotype;
 
   Genotype(this._genotype) {
-    final List<String> validGenotypes = ["AA", "Ai", "BB", "Bi", "AB", "ii"];
-    if (!validGenotypes.contains(_genotype)) {
-      throw Exception(
-          "Genotype '$_genotype' não é válido. Os valores válidos são: ${validGenotypes.join(', ')}");
-    }
+  final validGenotypes = ["AA", "Ai", "BB", "Bi", "AB", "ii"];
+  if (!validGenotypes.contains(_genotype)) {
+    throw ArgumentError.value(
+      _genotype,
+      'genotype',
+      "Genotype '$_genotype' não é válido. Os valores válidos são: ${validGenotypes.join(', ')}",
+    );
   }
+}
 
   String get bloodType {
     if (_genotype == 'AA' || _genotype == 'Ai') {
