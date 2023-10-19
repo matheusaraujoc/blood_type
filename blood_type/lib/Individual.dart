@@ -13,9 +13,7 @@ class Individual {
   Genotype get genotype => _genotype;
 
   @override
-  String toString() {
-    return '$name(${genotype.bloodType})';
-  }
+  String toString() => '$name(${genotype.bloodType})';
 
   static int _counter = 0;
 

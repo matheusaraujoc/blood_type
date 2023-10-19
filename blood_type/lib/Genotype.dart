@@ -49,18 +49,17 @@ class Genotype {
   }
 
   List<String> offsprings(Genotype other) {
-    // Ai Bi
-    final List<String> alleles1 = alleles; // ['A', 'i']
-    final List<String> alleles2 = other.alleles; // ['B', 'i']
-    List<String> temp = []; // ['AB', 'BA', 'Ai', 'iA', 'iB', 'Bi', 'ii', 'ii']
+    final List<String> alleles1 = alleles;
+    final List<String> alleles2 = other.alleles;
+    List<String> crossing = [];
     final List<String> result = [];
     for (final allele1 in alleles1) {
       for (final allele2 in alleles2) {
-        temp.add((allele1 + allele2));
-        temp.add((allele2 + allele1));
+        crossing.add((allele1 + allele2));
+        crossing.add((allele2 + allele1));
       }
     }
-    temp.forEach((element) {
+    crossing.forEach((element) {
       if (element == 'Ai' ||
           element == 'Bi' ||
           element == 'AB' ||
