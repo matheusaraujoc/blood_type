@@ -7,7 +7,7 @@ class Genotype {
     throw ArgumentError.value(
       _genotype,
       'genotype',
-      "Genotype '$_genotype' não é válido. Os valores válidos são: ${validGenotypes.join(', ')}",
+      "Genotype '$_genotype' is not valid. Valid values are: ${validGenotypes.join(', ')}",
     );
   }
 }
