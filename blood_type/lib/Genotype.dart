@@ -2,11 +2,12 @@ class Genotype {
   final String _genotype;
 
   Genotype(this._genotype) {
-  final List<String> validGenotypes = ["AA", "Ai", "BB", "Bi", "AB", "ii"];
-  if (!validGenotypes.contains(_genotype)) {
-    throw Exception("Genotype '$_genotype' não é válido. Os valores válidos são: ${validGenotypes.join(', ')}");
+    final List<String> validGenotypes = ["AA", "Ai", "BB", "Bi", "AB", "ii"];
+    if (!validGenotypes.contains(_genotype)) {
+      throw Exception(
+          "Genotype '$_genotype' não é válido. Os valores válidos são: ${validGenotypes.join(', ')}");
+    }
   }
-}
 
   String get bloodType {
     if (_genotype == 'AA' || _genotype == 'Ai') {
@@ -25,39 +26,71 @@ class Genotype {
   }
 
   List<String> get agglutinogens {
-  return alleles.where((allele) => allele == 'A' || allele == 'B').toList();
-}
+    return alleles.where((allele) => allele == 'A' || allele == 'B').toList();
+  }
 
-List<String> get agglutinins {
-  return alleles.where((allele) => allele == 'i').map((allele) {
-    if (allele == 'i') return 'B';
-    return 'A';
-  }).toList();
-}
+  List<String> get agglutinins {
+    var tempResult = agglutinogens;
+    var result = <String>[];
+
+    if (tempResult.length == 1) {
+      switch (tempResult[0]) {
+        case 'A':
+          result.add('B');
+          break;
+        case 'B':
+          result.add('A');
+          break;
+      }
+    } else if (tempResult.length == 0) {
+      result.addAll(['A', 'B']);
+    }
+    return result;
+  }
 
   List<String> offsprings(Genotype other) {
-    final List<String> alleles1 = alleles;
-    final List<String> alleles2 = other.alleles;
+    // Ai Bi
+    final List<String> alleles1 = alleles; // ['A', 'i']
+    final List<String> alleles2 = other.alleles; // ['B', 'i']
+    List<String> temp = []; // ['AB', 'BA', 'Ai', 'iA', 'iB', 'Bi', 'ii', 'ii']
     final List<String> result = [];
-
     for (final allele1 in alleles1) {
       for (final allele2 in alleles2) {
-        result.add((allele1 + allele2));
-        result.add((allele2 + allele1));
+        temp.add((allele1 + allele2));
+        temp.add((allele2 + allele1));
       }
     }
-
-    return result.toSet().toList();
+    temp.forEach((element) {
+      if (element == 'Ai' ||
+          element == 'Bi' ||
+          element == 'AB' ||
+          element == 'ii' ||
+          element == 'AA' ||
+          element == 'BB') {
+        if (!result.contains(element)) {
+          result.add(element);
+        }
+      }
+    });
+    return result;
   }
 
   bool compatible(Genotype other) {
-    final List<String> agglutinogens1 = agglutinogens;
-    final List<String> agglutinins1 = agglutinins;
-    final List<String> agglutinogens2 = other.agglutinogens;
-    final List<String> agglutinins2 = other.agglutinins;
-
-    return agglutinogens1.every((agglutinogen) => agglutinins2.contains(agglutinogen)) &&
-        agglutinogens2.every((agglutinogen) => agglutinins1.contains(agglutinogen));
+    bool result;
+    if (bloodType == 'A' &&
+        (other.bloodType == 'A' || other.bloodType == 'AB')) {
+      result = true;
+    } else if (bloodType == 'B' &&
+        (other.bloodType == 'B' || other.bloodType == 'AB')) {
+      result = true;
+    } else if (bloodType == 'AB' && other.bloodType == 'AB') {
+      result = true;
+    } else if (bloodType == 'O') {
+      result = true;
+    } else {
+      result = false;
+    }
+    return result;
   }
 
   @override
